@@ -29,7 +29,9 @@ export interface RequestConfig {
   headers?: HeadersRecord;
   /** Query parameters to append to URL */
   queryParams?: QueryParams;
-} /**
+}
+
+/**
  * Configuration for GET requests
  */
 export interface GetRequestConfig extends RequestConfig {
@@ -76,7 +78,9 @@ export interface ApiResponse<T = unknown> {
   headers: Headers;
   /** Success flag */
   ok: boolean;
-} /**
+}
+
+/**
  * Complete API client configuration
  */
 export interface ApiClientConfig {

@@ -142,8 +142,16 @@ export class ApiClient implements ApiClientInterface {
     // Handle empty responses (204 No Content, DELETE operations, etc.)
     if (response.status === 204) return {} as T;
 
-    // Parse JSON response
-    return response.json();
+    // Parse JSON response with error handling
+    try {
+      return await response.json();
+    } catch (error) {
+      throw this.createApiError(
+        error instanceof Error
+          ? new Error(`Failed to parse JSON response: ${error.message}`)
+          : new Error("Failed to parse JSON response"),
+      );
+    }
   }
 
   private createApiError(error: unknown): ApiError {
