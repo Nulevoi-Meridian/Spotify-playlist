@@ -74,8 +74,6 @@ Services are **loosely coupled** and can be tested independently.
 ## Development Guidelines
 
 ### Code Style
-- **Always run** `npm run lint` before committing
-- **Format code** with `npm run format` (Biome, not Prettier)
 - Use **functional components** with hooks
 - Prefer **TypeScript strict typing** - avoid `any`
 - Use **meaningful variable names** that describe the data
@@ -111,12 +109,6 @@ Services are **loosely coupled** and can be tested independently.
 - **Interface-based**: Clean public APIs via `index.ts` exports
 - **Testable**: Services can be tested in isolation
 - **Expandable**: Easy to add new services or swap implementations
-
-### Client-Side Processing
-- **Audio files MUST be processed client-side** (browser)
-- Never upload audio files to the server
-- Use File API and FileReader for local file access
-- Extract metadata in the browser to protect user privacy
 
 ### Server-Side API Calls
 - **Spotify API calls MUST be server-side**
@@ -258,16 +250,6 @@ User's Computer (Client)          Your Server              Spotify API
 - Rotate tokens regularly
 - Clear tokens on logout
 
-### Environment Variables
-```bash
-SPOTIFY_CLIENT_ID=your_client_id
-SPOTIFY_CLIENT_SECRET=your_client_secret
-SPOTIFY_REDIRECT_URI=http://localhost:3000/api/auth/callback
-NEXTAUTH_SECRET=your_nextauth_secret  # if using NextAuth
-```
-
----
-
 ## Testing Checklist
 
 ### Before Committing
@@ -313,27 +295,6 @@ NEXTAUTH_SECRET=your_nextauth_secret  # if using NextAuth
 - Use Biome for linting/formatting
 - Handle missing metadata gracefully
 - Show preview before creating playlist
-
----
-
-## Development Commands
-
-```bash
-# Start development server (with Turbopack)
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Run linting
-npm run lint
-
-# Format code
-npm run format
-```
 
 ---
 
