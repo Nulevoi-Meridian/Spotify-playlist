@@ -1,4 +1,4 @@
-name: CI
+name: TypeScript & Biome Checks
 
 on:
   pull_request:
@@ -27,5 +27,5 @@ jobs:
       - name: Biome lint
         run: npm run lint
 
-      - name: Biome format check
-        run: npm run format -- --check
+        - name: Biome format check
+          run: biome format --check
