@@ -4,56 +4,47 @@
  * Supports GET and POST requests with query params, headers, and URL handling
  */
 
+import { GET, JsonMimeType, POST } from "./constants";
 import type {
   ApiClientConfig,
   ApiClientInterface,
+  ApiClientQueryParams,
+  ApiClientRequestConfig,
+  ApiClientResponse,
   ApiError,
-  ApiResponse,
-  GetRequestConfig,
-  HeadersRecord,
-  HttpMethod,
-  PostRequestConfig,
-  QueryParams,
-  RequestBody,
 } from "./types";
 
-/**
- * ApiClient - A reusable, type-safe HTTP client
- */
 export class ApiClient implements ApiClientInterface {
   private baseUrl: string;
-  private defaultHeaders: HeadersRecord;
+  private defaultHeaders: HeadersInit;
 
-  constructor(config: ApiClientConfig = {}) {
+  constructor(config: ApiClientConfig) {
     this.baseUrl = config.baseUrl || "";
     this.defaultHeaders = config.defaultHeaders || {};
   }
 
   private async request<T>(
-    method: HttpMethod,
-    url: string,
-    body?: RequestBody,
-    config: GetRequestConfig | PostRequestConfig = {},
-  ): Promise<ApiResponse<T>> {
-    const fullUrl = this.buildUrl(url, config.queryParams);
-    const headers = this.buildHeaders(method, body, config);
+    config: ApiClientRequestConfig,
+  ): Promise<ApiClientResponse<T>> {
+    const { url: path, queryParams, method, body } = config;
+
+    const url = this.constructUrl({
+      baseUrl: this.baseUrl,
+      url: path,
+      queryParams,
+    });
+    const headers = this.createRequestHeaders(config);
+    const fetchOptions: RequestInit = {
+      method,
+      headers,
+    };
+
+    if (method === POST && body !== undefined) {
+      fetchOptions.body = JSON.stringify(body);
+    }
 
     try {
-      // Prepare fetch options
-      const fetchOptions: RequestInit = {
-        method,
-        headers,
-      };
-
-      // Add body for POST requests
-      if (method === "POST" && body !== undefined) {
-        fetchOptions.body = JSON.stringify(body);
-      }
-
-      // Perform the fetch request
-      const response = await fetch(fullUrl, fetchOptions);
-
-      // Parse response to JSON
+      const response = await fetch(url, fetchOptions);
       const data = await this.parseResponse<T>(response);
 
       return {
@@ -67,11 +58,14 @@ export class ApiClient implements ApiClientInterface {
     }
   }
 
-  private buildUrl(url: string, queryParams?: QueryParams): string {
-    // Combine base URL with provided URL
-    let fullUrl = url.startsWith("http") ? url : `${this.baseUrl}${url}`;
+  private constructUrl(params: {
+    baseUrl: string;
+    url: string;
+    queryParams?: ApiClientQueryParams;
+  }): string {
+    const { baseUrl, url: path, queryParams } = params;
+    let url = new URL(path, baseUrl).toString();
 
-    // Add query parameters if provided
     if (queryParams && Object.keys(queryParams).length > 0) {
       const searchParams = new URLSearchParams();
 
@@ -79,7 +73,6 @@ export class ApiClient implements ApiClientInterface {
         if (value === undefined) continue;
 
         if (Array.isArray(value)) {
-          // Handle array values
           for (const item of value) {
             searchParams.append(key, String(item));
           }
@@ -90,59 +83,32 @@ export class ApiClient implements ApiClientInterface {
 
       const queryString = searchParams.toString();
       if (queryString) {
-        fullUrl += fullUrl.includes("?")
-          ? `&${queryString}`
-          : `?${queryString}`;
+        url += url.includes("?") ? `&${queryString}` : `?${queryString}`;
       }
     }
 
-    return fullUrl;
+    return url;
   }
 
-  /**
-   * Build request headers
-   * @param method - HTTP method
-   * @param body - Request body
-   * @param config - Request configuration
-   * @returns Headers object
-   */
-  private buildHeaders(
-    method: HttpMethod,
-    body?: RequestBody,
-    config: GetRequestConfig | PostRequestConfig = {},
-  ): Headers {
+  private createRequestHeaders(config: ApiClientRequestConfig): Headers {
+    const { headers: customHeaders, method, body, contentType } = config;
     const headers = new Headers();
 
-    // Merge default headers with request-specific headers
     Object.entries({
       ...this.defaultHeaders,
-      ...config.headers,
+      ...(customHeaders || {}),
     }).forEach(([key, value]) => {
       headers.set(key, value);
     });
 
-    // Set Content-Type for POST requests if not already set
-    if (
-      method === "POST" &&
-      body !== undefined &&
-      !headers.has("Content-Type")
-    ) {
-      const contentType =
-        "contentType" in config && config.contentType
-          ? config.contentType
-          : "application/json";
-
-      headers.set("Content-Type", contentType);
+    if (method === POST && body !== undefined && !headers.has("Content-Type")) {
+      headers.set("Content-Type", contentType || JsonMimeType);
     }
 
     return headers;
   }
 
   private async parseResponse<T>(response: Response): Promise<T> {
-    // Handle empty responses (204 No Content, DELETE operations, etc.)
-    if (response.status === 204) return {} as T;
-
-    // Parse JSON response with error handling
     try {
       return await response.json();
     } catch (error) {
@@ -168,18 +134,21 @@ export class ApiClient implements ApiClientInterface {
     };
   }
 
-  async get<T = unknown>(
-    url: string,
-    config: GetRequestConfig = {},
-  ): Promise<ApiResponse<T>> {
-    return this.request<T>("GET", url, undefined, config);
+  async get<T>(
+    config: Omit<ApiClientRequestConfig, "method" | "body" | "contentType">,
+  ): Promise<ApiClientResponse<T>> {
+    return this.request<T>({
+      ...config,
+      method: GET,
+    });
   }
 
   async post<T = unknown>(
-    url: string,
-    body?: RequestBody,
-    config: PostRequestConfig = {},
-  ): Promise<ApiResponse<T>> {
-    return this.request<T>("POST", url, body, config);
+    config: Omit<ApiClientRequestConfig, "method">,
+  ): Promise<ApiClientResponse<T>> {
+    return this.request<T>({
+      ...config,
+      method: POST,
+    });
   }
 }

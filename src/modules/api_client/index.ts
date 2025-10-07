@@ -8,7 +8,7 @@ export type {
   ApiClientConfig,
   ApiClientInterface,
   ApiError,
-  ApiResponse,
+  ApiClientResponse as ApiResponse,
   GetRequestConfig,
   HeadersRecord,
   HttpMethod,
