@@ -24,8 +24,5 @@ jobs:
       - name: TypeScript type check
         run: npx tsc --noEmit
 
-      - name: Biome lint
+      - name: Biome lint and format check
         run: npm run lint
-
-      - name: Biome format check
-        run: npx biome format --check
