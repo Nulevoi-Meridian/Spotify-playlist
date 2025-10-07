@@ -3,119 +3,53 @@
  * Core types for the reusable API service
  */
 
-/**
- * HTTP Methods supported by the API client
- */
-export type HttpMethod = "GET" | "POST";
+import type { GET, JsonMimeType, POST } from "./constants";
 
-/**
- * Query parameters - can be a record of string/number/boolean values or arrays
- */
-export type QueryParams = Record<
+export type ApiClientBody = URLSearchParams | string;
+export type ApiClientHttpMethod = typeof GET | typeof POST;
+export type ApiClientResponseType = "json";
+export type ApiClientQueryParams = Record<
   string,
   string | number | boolean | string[] | number[] | undefined
 >;
 
-/**
- * HTTP Headers as key-value pairs
- */
-export type HeadersRecord = Record<string, string>;
+export type ApiClientContentType = typeof JsonMimeType;
 
-/**
- * Base request configuration
- */
-export interface RequestConfig {
-  /** Request headers */
-  headers?: HeadersRecord;
-  /** Query parameters to append to URL */
-  queryParams?: QueryParams;
+export interface ApiClientConfig {
+  baseUrl?: string;
+  defaultHeaders?: HeadersInit;
 }
 
-/**
- * Configuration for GET requests
- */
-export interface GetRequestConfig extends RequestConfig {
-  // GET-specific options can be added here
+export interface ApiClientRequestConfig {
+  method: ApiClientHttpMethod;
+  url: string;
+  body?: ApiClientBody;
+  headers?: HeadersInit;
+  responseType?: ApiClientResponseType;
+  queryParams?: ApiClientQueryParams;
+  contentType?: ApiClientContentType;
 }
 
-/**
- * Configuration for POST requests
- */
-export interface PostRequestConfig extends RequestConfig {
-  /** Content-Type header (defaults to 'application/json') */
-  contentType?: string;
-}
-
-/**
- * Request body for POST requests
- * JSON object only - will be serialized with JSON.stringify
- */
-export type RequestBody = Record<string, unknown>;
-
-/**
- * Standardized API error
- */
-export interface ApiError {
-  /** Error message */
-  message: string;
-  /** HTTP status code (if available) */
-  statusCode?: number;
-  /** Original error object */
-  originalError?: Error;
-  /** Response body (if available) */
-  responseBody?: unknown;
-}
-
-/**
- * API response wrapper
- */
-export interface ApiResponse<T = unknown> {
-  /** Response data */
+export interface ApiClientResponse<T = unknown> {
   data: T;
-  /** HTTP status code */
   status: number;
-  /** Response headers */
   headers: Headers;
-  /** Success flag */
   ok: boolean;
 }
 
-/**
- * Complete API client configuration
- */
-export interface ApiClientConfig {
-  /** Base URL for all requests */
-  baseUrl?: string;
-  /** Default headers for all requests */
-  defaultHeaders?: HeadersRecord;
+export interface ApiError {
+  message: string;
+  statusCode?: number;
+  originalError?: Error;
+  responseBody?: unknown;
 }
 
-/**
- * API Client Interface
- * Defines the public API for HTTP client implementations
- */
 export interface ApiClientInterface {
-  /**
-   * Perform a GET request
-   * @param url - Endpoint URL
-   * @param config - Request configuration
-   * @returns API response with typed data
-   */
   get<T = unknown>(
-    url: string,
-    config?: GetRequestConfig,
-  ): Promise<ApiResponse<T>>;
+    config: Omit<ApiClientRequestConfig, "method" | "body" | "contentType">,
+  ): Promise<ApiClientResponse<T>>;
 
-  /**
-   * Perform a POST request
-   * @param url - Endpoint URL
-   * @param body - Request body (JSON object)
-   * @param config - Request configuration
-   * @returns API response with typed data
-   */
   post<T = unknown>(
-    url: string,
-    body?: RequestBody,
-    config?: PostRequestConfig,
-  ): Promise<ApiResponse<T>>;
+    config: Omit<ApiClientRequestConfig, "method">,
+  ): Promise<ApiClientResponse<T>>;
 }
