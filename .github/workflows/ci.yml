@@ -28,4 +28,4 @@ jobs:
         run: npm run lint
 
       - name: Biome format check
-        run: biome format --check
+        run: npx biome format --check
