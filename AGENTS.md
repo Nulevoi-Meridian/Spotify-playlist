@@ -75,6 +75,7 @@ Services are **loosely coupled** and can be tested independently.
 
 ### Code Style
 - Use **functional components** with hooks
+- Prefer **arrow functions** over function declarations (e.g., `const myFunc = () => {}` instead of `function myFunc() {}`)
 - Prefer **TypeScript strict typing** - avoid `any`
 - Use **meaningful variable names** that describe the data
 
