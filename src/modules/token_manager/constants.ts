@@ -1,0 +1,1 @@
+export const TOKEN_EXPIRATION_SAFETY_WINDOW_MS = 90000; // 90 seconds

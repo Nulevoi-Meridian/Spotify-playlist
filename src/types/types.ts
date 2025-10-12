@@ -11,9 +11,3 @@ export interface CookieOptions {
   priority?: "low" | "medium" | "high" | undefined;
   partitioned?: boolean | undefined;
 }
-
-export interface StorageInterface {
-  setItem(key: string, value: string): void;
-  getItem(key: string): string | null;
-  removeItem(key: string): void;
-}
