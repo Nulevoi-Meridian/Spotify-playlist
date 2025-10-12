@@ -4,7 +4,7 @@
 //  *
 //  */
 
-import type { CookieOptions } from "@/types/types";
+import type { CookieOptions, CookieReturnType } from "@/types/types";
 import {
   getCookie,
   hasCookie,
@@ -21,18 +21,19 @@ const createTokenManager = (
   const isTokenExpired = async (
     name: CookieOptions["name"]
   ): Promise<boolean> => {
-    const expiresAt = await getToken(name);
-    if (!expiresAt) return true;
+    const token = await getToken(name);
+    if (!token) return true;
 
-    return Date.now() >= +expiresAt - TOKEN_EXPIRATION_SAFETY_WINDOW_MS;
+    return Date.now() >= +token.value - TOKEN_EXPIRATION_SAFETY_WINDOW_MS;
   };
 
   const setToken = (options: CookieOptions): void => {
     setCookie(options);
   };
 
-  const getToken = (name: CookieOptions["name"]): Promise<string | null> =>
-    getCookie(name);
+  const getToken = (
+    name: CookieOptions["name"]
+  ): Promise<CookieReturnType | null> => getCookie(name);
 
   const hasToken = (name: CookieOptions["name"]): Promise<boolean> =>
     hasCookie(name);

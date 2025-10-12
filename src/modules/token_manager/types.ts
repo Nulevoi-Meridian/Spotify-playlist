@@ -1,4 +1,4 @@
-import type { CookieOptions } from "@/types/types";
+import type { CookieOptions, CookieReturnType } from "@/types/types";
 import type {
   getCookie,
   hasCookie,
@@ -7,7 +7,7 @@ import type {
 
 export interface TokenManagerInterface {
   setToken: (options: CookieOptions) => void;
-  getToken: (name: CookieOptions["name"]) => Promise<string | null>;
+  getToken: (name: CookieOptions["name"]) => Promise<CookieReturnType | null>;
   hasToken: (name: CookieOptions["name"]) => Promise<boolean>;
   isValidToken: (name: CookieOptions["name"]) => Promise<boolean>;
 }

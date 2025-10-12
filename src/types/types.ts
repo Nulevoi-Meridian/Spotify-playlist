@@ -11,3 +11,8 @@ export interface CookieOptions {
   priority?: "low" | "medium" | "high" | undefined;
   partitioned?: boolean | undefined;
 }
+
+export type CookieReturnType = {
+  name: string;
+  value: string;
+};

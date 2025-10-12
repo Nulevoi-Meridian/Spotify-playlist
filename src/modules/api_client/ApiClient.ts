@@ -24,7 +24,7 @@ export class ApiClient implements ApiClientInterface {
   }
 
   private async request<T>(
-    config: ApiClientRequestConfig,
+    config: ApiClientRequestConfig
   ): Promise<ApiClientResponse<T>> {
     const { url: path, queryParams, method, body } = config;
 
@@ -115,7 +115,7 @@ export class ApiClient implements ApiClientInterface {
       throw this.createApiError(
         error instanceof Error
           ? new Error(`Failed to parse JSON response: ${error.message}`)
-          : new Error("Failed to parse JSON response"),
+          : new Error("Failed to parse JSON response")
       );
     }
   }
@@ -135,7 +135,7 @@ export class ApiClient implements ApiClientInterface {
   }
 
   async get<T>(
-    config: Omit<ApiClientRequestConfig, "method" | "body" | "contentType">,
+    config: Omit<ApiClientRequestConfig, "method" | "body" | "contentType">
   ): Promise<ApiClientResponse<T>> {
     return this.request<T>({
       ...config,
@@ -144,7 +144,7 @@ export class ApiClient implements ApiClientInterface {
   }
 
   async post<T = unknown>(
-    config: Omit<ApiClientRequestConfig, "method">,
+    config: Omit<ApiClientRequestConfig, "method">
   ): Promise<ApiClientResponse<T>> {
     return this.request<T>({
       ...config,

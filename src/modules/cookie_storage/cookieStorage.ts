@@ -1,6 +1,5 @@
+import type { CookieOptions, CookieReturnType } from "@/types/types";
 import { cookies } from "next/headers";
-
-import type { CookieOptions } from "@/types/types";
 
 /**
  * Sets a cookie with the specified key, value, and options.
@@ -22,9 +21,9 @@ export const setCookie = async (options: CookieOptions): Promise<void> => {
  */
 export const getCookie = async (
   name: CookieOptions["name"]
-): Promise<string | null> => {
+): Promise<CookieReturnType | null> => {
   const cookieStore = await cookies();
-  return cookieStore.get(name)?.value ?? null;
+  return cookieStore.get(name) ?? null;
 };
 
 /**
