@@ -18,15 +18,6 @@ const createTokenManager = (
 ): TokenManagerInterface => {
   const { setCookie, getCookie, hasCookie } = params;
 
-  const isTokenExpired = async (
-    name: CookieOptions["name"]
-  ): Promise<boolean> => {
-    const token = await getToken(name);
-    if (!token) return true;
-
-    return Date.now() >= +token.value - TOKEN_EXPIRATION_SAFETY_WINDOW_MS;
-  };
-
   const setToken = (options: CookieOptions): void => {
     setCookie(options);
   };
@@ -37,6 +28,15 @@ const createTokenManager = (
 
   const hasToken = (name: CookieOptions["name"]): Promise<boolean> =>
     hasCookie(name);
+
+  const isTokenExpired = async (
+    name: CookieOptions["name"]
+  ): Promise<boolean> => {
+    const token = await getToken(name);
+    if (!token) return true;
+
+    return Date.now() >= +token.value - TOKEN_EXPIRATION_SAFETY_WINDOW_MS;
+  };
 
   const isValidToken = async (
     name: CookieOptions["name"]
