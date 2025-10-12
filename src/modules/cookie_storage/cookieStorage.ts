@@ -1,12 +1,11 @@
-import type { CookieOptions, CookieReturnType } from "@/types/types";
 import { cookies } from "next/headers";
 
+import type { CookieOptions, CookieReturnType } from "@/types/types";
+
 /**
- * Sets a cookie with the specified key, value, and options.
+ * Sets a cookie with the specified options.
  *
- * @param name - The cookie name
- * @param value - The cookie value
- * @param options - Optional cookie configuration (httpOnly, secure, sameSite, maxAge, etc.)
+ * @param options - Cookie configuration object (name, value, httpOnly, secure, sameSite, maxAge, etc.)
  */
 export const setCookie = async (options: CookieOptions): Promise<void> => {
   const cookieStore = await cookies();
@@ -16,7 +15,7 @@ export const setCookie = async (options: CookieOptions): Promise<void> => {
 /**
  * Gets a cookie value by name.
  *
- * @param name - The cookie name
+ * @param name - The name of the cookie to retrieve
  * @returns The cookie value or null if not found
  */
 export const getCookie = async (
@@ -27,9 +26,9 @@ export const getCookie = async (
 };
 
 /**
- * Checks if a cookie exists.
+ * Checks if a cookie exists by name.
  *
- * @param name - The cookie name
+ * @param name - The name of the cookie to check
  * @returns True if the cookie exists, false otherwise
  */
 export const hasCookie = async (
