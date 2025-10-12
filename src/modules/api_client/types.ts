@@ -46,10 +46,10 @@ export interface ApiError {
 
 export interface ApiClientInterface {
   get<T = unknown>(
-    config: Omit<ApiClientRequestConfig, "method" | "body" | "contentType">,
+    config: Omit<ApiClientRequestConfig, "method" | "body" | "contentType">
   ): Promise<ApiClientResponse<T>>;
 
   post<T = unknown>(
-    config: Omit<ApiClientRequestConfig, "method">,
+    config: Omit<ApiClientRequestConfig, "method">
   ): Promise<ApiClientResponse<T>>;
 }

@@ -12,8 +12,7 @@ export interface CookieOptions {
   partitioned?: boolean | undefined;
 }
 
-export interface StorageInterface {
-  setItem(key: string, value: string): void;
-  getItem(key: string): string | null;
-  removeItem(key: string): void;
-}
+export type CookieReturnType = {
+  name: string;
+  value: string;
+};
