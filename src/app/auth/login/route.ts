@@ -11,7 +11,7 @@ export async function GET() {
     response_type: "code",
     redirect_uri: SPOTIFY_REDIRECT_URI,
     state: generateId(),
-    scope: scope,
+    scope,
     show_dialog: "true",
   });
 

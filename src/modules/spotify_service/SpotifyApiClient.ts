@@ -9,6 +9,12 @@ class SpotifyApiClient {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
+    if (!clientId || !clientSecret) {
+      throw new Error(
+        "Missing Spotify client credentials: SPOTIFY_CLIENT_ID and/or SPOTIFY_CLIENT_SECRET are not set in environment variables."
+      );
+    }
+
     return this.apiClient.post({
       url: SPOTIFY_TOKEN_URL,
       body: new URLSearchParams({
