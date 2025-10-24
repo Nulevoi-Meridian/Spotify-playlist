@@ -1,3 +1,4 @@
+"use server";
 // /**
 //  * Token Manager
 //  * Manages Spotify OAuth tokens (access, refresh, expiration)
