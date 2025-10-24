@@ -1,9 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const handleClick = async () => {
+    window.location.href = "/auth/login";
+  };
+
   return (
     <div className={styles.page}>
+      <button type="button" onClick={handleClick}>
+        Login with spotify
+      </button>
       <main className={styles.main}>
         <Image
           className={styles.logo}
