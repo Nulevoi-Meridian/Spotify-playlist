@@ -22,12 +22,12 @@ const createTokenManager = (
     await setCookie(options);
   };
 
-  const getToken = async (
+  const getToken = (
     name: CookieOptions["name"]
-  ): Promise<CookieReturnType | null> => await getCookie(name);
+  ): Promise<CookieReturnType | null> => getCookie(name);
 
-  const hasToken = async (name: CookieOptions["name"]): Promise<boolean> =>
-    await hasCookie(name);
+  const hasToken = (name: CookieOptions["name"]): Promise<boolean> =>
+    hasCookie(name);
 
   const isTokenExpired = async (
     name: CookieOptions["name"]

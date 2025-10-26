@@ -9,8 +9,6 @@ export const config = {
 };
 
 export async function proxy(request: NextRequest) {
-  console.log("Access token is valid, proceeding to playlist creation.");
-
   if (!(await tokenManager.hasToken(COOKIE_NAMES.SPOTIFY_REFRESH_TOKEN))) {
     return NextResponse.next();
   }

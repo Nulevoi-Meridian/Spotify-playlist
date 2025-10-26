@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     );
 
     const { access_token, refresh_token, expires_in } =
-      await spotifyApiClient.getAccessToken(requestParams.get("code") || "");
+      await spotifyApiClient.getAccessToken(requestParams.get("code") ?? "");
 
     await tokenManager.setToken({
       name: COOKIE_NAMES.SPOTIFY_ACCESS_TOKEN,

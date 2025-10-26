@@ -32,7 +32,6 @@ class SpotifyApiClient {
       public?: boolean;
     }
   ) {
-    console.log("Creating playlist with body:", body);
     const { data } = await this.apiClient.post({
       url: `${SPOTIFY_API_BASE_URL}/users/${userId}/playlists`,
       body: JSON.stringify(body),
@@ -42,6 +41,7 @@ class SpotifyApiClient {
       },
     });
 
+    //TODO add schema validation
     return data;
   }
 }
