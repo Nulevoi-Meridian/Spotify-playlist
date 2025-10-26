@@ -1,11 +1,23 @@
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { REFRESH_TOKEN_ROUTE_URL } from "./constants";
+import { COOKIE_NAMES } from "./modules/cookie_storage/constants";
+import { tokenManager } from "./modules/token_manager/tokenManager";
 
 export const config = {
-  matcher: "/auth/:path*",
+  matcher: "/routes/auth/login",
 };
 
-// This function can be marked `async` if using `await` inside
-export function proxy(request: NextRequest) {
-  // console.log(request, "proxy request");
-  //   return NextResponse.redirect(new URL("/home", request.url));
+export async function proxy(request: NextRequest) {
+  console.log("Access token is valid, proceeding to playlist creation.");
+
+  if (!(await tokenManager.hasToken(COOKIE_NAMES.SPOTIFY_REFRESH_TOKEN))) {
+    return NextResponse.next();
+  }
+
+  if (
+    !(await tokenManager.isValidToken(COOKIE_NAMES.SPOTIFY_EXPIRATION_TIME))
+  ) {
+    return NextResponse.redirect(new URL(REFRESH_TOKEN_ROUTE_URL, request.url));
+  }
 }

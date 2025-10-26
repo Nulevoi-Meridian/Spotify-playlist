@@ -37,17 +37,8 @@ export class ApiClient implements ApiClientInterface {
     const fetchOptions: RequestInit = {
       method,
       headers,
+      body,
     };
-
-    if (method === POST && body !== undefined) {
-      // If Content-Type is x-www-form-urlencoded, send body as raw string
-      const contentType = headers.get("Content-Type");
-      if (contentType === "application/x-www-form-urlencoded") {
-        fetchOptions.body = body;
-      } else {
-        fetchOptions.body = JSON.stringify(body);
-      }
-    }
 
     try {
       const response = await fetch(url, fetchOptions);
@@ -70,11 +61,7 @@ export class ApiClient implements ApiClientInterface {
     queryParams?: ApiClientQueryParams;
   }): string {
     const { baseUrl, url: path, queryParams } = params;
-
-    // Handle absolute URLs directly, otherwise combine with baseUrl
-    const isAbsoluteUrl =
-      path.startsWith("http://") || path.startsWith("https://");
-    let url = isAbsoluteUrl ? path : new URL(path, baseUrl).toString();
+    let url = new URL(path, baseUrl).toString();
 
     if (queryParams && Object.keys(queryParams).length > 0) {
       const searchParams = new URLSearchParams();
