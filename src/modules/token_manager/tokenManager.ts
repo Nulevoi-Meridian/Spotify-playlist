@@ -1,4 +1,3 @@
-"use server";
 // /**
 //  * Token Manager
 //  * Manages Spotify OAuth tokens (access, refresh, expiration)
@@ -19,8 +18,8 @@ const createTokenManager = (
 ): TokenManagerInterface => {
   const { setCookie, getCookie, hasCookie } = params;
 
-  const setToken = (options: CookieOptions): void => {
-    setCookie(options);
+  const setToken = async (options: CookieOptions): Promise<void> => {
+    await setCookie(options);
   };
 
   const getToken = (

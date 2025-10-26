@@ -30,7 +30,7 @@ export interface ApiClientRequestConfig {
   contentType?: ApiClientContentType;
 }
 
-export interface ApiClientResponse<T = unknown> {
+export interface ApiClientResponse<T> {
   data: T;
   status: number;
   headers: Headers;
