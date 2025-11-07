@@ -118,8 +118,8 @@ export function FileUploader() {
               </tr>
             </thead>
             <tbody>
-              {tracks.map((track) => (
-                <tr key={track.filename}>
+              {tracks.map((track, index) => (
+                <tr key={`${track.filename}-${index}`}>
                   <td
                     style={{
                       padding: "8px",
