@@ -12,6 +12,7 @@
     "dev:local": "NEXT_HTTPS=true NEXT_HTTPS_KEY=certificates/localhost-key.pem NEXT_HTTPS_CERT=certificates/localhost.pem next dev --experimental-https --hostname myapp.local"
   },
   "dependencies": {
+    "music-metadata": "^11.9.0",
     "next": "^16.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
