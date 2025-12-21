@@ -6,7 +6,7 @@ import { UploadTrackIcon } from "./icons/UploadTrackIcon";
 // import { Button } from "@/components/ui/button";
 
 export const UploadSection = () => {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, _setIsDragging] = useState(false);
 
   return (
     <div className="container mx-auto px-4 py-12">
