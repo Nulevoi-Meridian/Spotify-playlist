@@ -1,6 +1,7 @@
 "use client";
 
-import styles from "./page.module.css";
+import { Navbar } from "@/components/Navbar";
+import { UploadSection } from "@/components/UploadSection";
 
 export default function Home() {
   const handleClick = async () => {
@@ -8,10 +9,10 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.page}>
-      <button type="button" onClick={handleClick}>
-        Create playlist with Spotify
-      </button>
-    </div>
+    <main className="min-h-screen">
+      <Navbar />
+      <UploadSection />
+      {/* <FileUploader /> */}
+    </main>
   );
 }
