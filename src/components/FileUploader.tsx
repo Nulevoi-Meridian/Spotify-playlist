@@ -34,6 +34,7 @@ export function FileUploader() {
 
         // Extract metadata from audio file
         const metadata = await parseBlob(file);
+        console.log(`Metadata for ${file.name}:`, metadata);
 
         parsedTracks.push({
           filename: file.name,
